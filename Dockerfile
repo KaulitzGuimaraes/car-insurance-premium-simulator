@@ -8,7 +8,7 @@ RUN poetry install --only main --no-root
 
 FROM python:3.11-slim AS runtime
 
-ENV PATH="/app/.venv/bin:$PATH" PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 APP_ENVIRONMENT=production
+ENV PATH="/app/.venv/bin:$PATH" PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 WORKDIR /app
 RUN groupadd --system app && useradd --system --gid app app
 COPY --from=builder /app/.venv /app/.venv

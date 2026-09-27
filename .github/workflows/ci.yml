@@ -32,5 +32,29 @@ jobs:
       - name: Smoke test Docker image
         run: |
           docker run -d --name api -p 8000:8000 premium-simulator:ci
+
           trap 'docker logs api; docker rm -f api' EXIT
-          curl --fail --retry 15 --retry-connrefused --retry-delay 2 http://localhost:8000/api/v1/health
+
+          for i in {1..30}; do
+            STATUS=$(docker inspect \
+              --format='{{.State.Health.Status}}' api)
+
+            echo "Container health: $STATUS"
+
+            if [ "$STATUS" = "healthy" ]; then
+              curl --fail http://localhost:8000/api/v1/health
+              exit 0
+            fi
+
+            if [ "$STATUS" = "unhealthy" ]; then
+              echo "Container became unhealthy"
+              docker logs api
+              exit 1
+            fi
+
+            sleep 2
+          done
+
+          echo "Container did not become healthy in time"
+          docker logs api
+          exit 1

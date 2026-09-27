@@ -82,10 +82,12 @@ Contains technical implementations such as configuration loading and future exte
 Pricing rules are loaded from:
 
 ```text
-config.yaml
+config.yml
 ```
 
 ## Pricing Rules
+
+Business values are loaded from `config.yml`; application environment variables and a `.env` file are not used.
 
 Default configuration:
 
@@ -113,6 +115,8 @@ value_rate =
 applied_rate =
     age_rate + value_rate + geographic_adjustment
 ```
+
+`geographic_adjustment` is currently zero in API quotes.
 
 ### Premium
 
@@ -144,16 +148,16 @@ policy_limit =
 
 ## Running the Application
 
-Install the dependencies:
+Use Python 3.11–3.13 and Poetry. Install the dependencies:
 
 ```bash
-pip install -r requirements.txt
+poetry install
 ```
 
 Start the API:
 
 ```bash
-uvicorn app.main:app --reload
+poetry run uvicorn app.main:app --reload
 ```
 
 The Swagger documentation will be available at:
@@ -161,6 +165,17 @@ The Swagger documentation will be available at:
 ```text
 http://localhost:8000/docs
 ```
+
+## Docker
+
+Build and run the production image:
+
+```bash
+docker build -t premium-simulator .
+docker run --rm -p 8000:8000 premium-simulator
+```
+
+For development with live reload, run `docker compose up --build`. The health endpoint is `/api/v1/health`.
 
 ## Example Request
 
@@ -181,10 +196,12 @@ http://localhost:8000/docs
 Run the test suite with:
 
 ```bash
-pytest
+poetry run ruff check .
+poetry run ruff format --check .
+poetry run pytest
 ```
 
-The test strategy includes domain validation, configuration behavior, and API integration.
+Tests cover exact domain calculation results, complete value blocks, future-year validation, value objects, configuration behavior, and API integration.
 
 ## Design Decisions
 
@@ -193,4 +210,4 @@ The test strategy includes domain validation, configuration behavior, and API in
 - Configurable business rules are loaded from YAML instead of being hard-coded.
 - FastAPI is kept outside the domain layer.
 - `QuoteCalculated` represents the domain event generated after a successful quote calculation.
-- The GIS adjustment is optional. The domain is already prepared to receive a geographic risk adjustment through `RateAdjustment`, so a concrete GIS provider can be added later without changing the core premium calculation logic.
+- `registration_location` and `RateAdjustment` prepare the domain for the optional GIS bonus. No concrete geographic risk provider is currently implemented. The API accepts `registration_location` but does not use it to change the premium; it passes no geographic adjustment to the calculator. The `gis` limits in `config.yml` are reserved for future support.
