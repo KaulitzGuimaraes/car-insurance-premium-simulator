@@ -498,8 +498,7 @@ Conceptual contract:
 
 ```python
 class GeographicRiskProvider(Protocol):
-    def get_risk_adjustment(self, address: Address) -> RateAdjustment:
-        ...
+    def get_risk_adjustment(self, address: Address) -> RateAdjustment: ...
 ```
 
 Then create an infrastructure implementation:

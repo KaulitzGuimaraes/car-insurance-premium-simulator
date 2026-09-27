@@ -89,9 +89,9 @@ class PremiumCalculator:
         return age_rate + value_rate + adjustment
 
     def calculate_base_policy_limit(
-            self,
-            car: Car,
-            rules: PricingRules,
+        self,
+        car: Car,
+        rules: PricingRules,
     ) -> Money:
         """
         Calculate the policy limit before applying the deductible.
@@ -106,10 +106,7 @@ class PremiumCalculator:
 
             base_policy_limit = 100000
         """
-        value = (
-                car.value.value
-                * rules.coverage_percentage
-        )
+        value = car.value.value * rules.coverage_percentage
 
         return Money(value)
 

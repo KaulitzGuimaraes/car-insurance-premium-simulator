@@ -58,4 +58,3 @@ class InsuranceQuote:
     @property
     def quote_id(self) -> UUID:
         return self._quote_id
-

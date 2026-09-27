@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
 from uuid import UUID
 
@@ -14,7 +14,7 @@ class QuoteCalculated:
         quote_id: UUID,
     ):
         self._applied_rate = applied_rate
-        self._calculated_at = datetime.now(timezone.utc)
+        self._calculated_at = datetime.now(UTC)
         self._calculated_premium = calculated_premium
         self._policy_limit = policy_limit
         self._quote_id = quote_id

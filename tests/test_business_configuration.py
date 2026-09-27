@@ -3,7 +3,6 @@ from decimal import Decimal
 import pytest
 
 from app.domain.entities.car import Car
-from app.domain.services.premium_calculator import PremiumCalculator
 from app.domain.value_objects.money import Money
 from app.domain.value_objects.percentage import Percentage
 from app.domain.value_objects.rate_adjustment import RateAdjustment

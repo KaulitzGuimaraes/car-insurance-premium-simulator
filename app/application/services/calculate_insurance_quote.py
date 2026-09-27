@@ -1,8 +1,8 @@
 from datetime import date
 
 from app.domain.aggregates.insurance_quote import InsuranceQuote
-from app.domain.events.quote_calculated import QuoteCalculated
 from app.domain.entities.car import Car
+from app.domain.events.quote_calculated import QuoteCalculated
 from app.domain.services.premium_calculator import PremiumCalculator
 from app.domain.value_objects.money import Money
 from app.domain.value_objects.percentage import Percentage
