@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install Poetry
+        run: pip install poetry==2.2.1
+      - name: Validate and install dependencies
+        run: |
+          poetry check --lock
+          poetry install --no-interaction
+      - name: Lint and format
+        run: |
+          poetry run ruff check .
+          poetry run ruff format --check .
+      - name: Test
+        run: poetry run pytest
+      - name: Build Docker image
+        run: docker build -t premium-simulator:ci .
+      - name: Smoke test Docker image
+        run: |
+          docker run -d --name api -p 8000:8000 premium-simulator:ci
+          trap 'docker logs api; docker rm -f api' EXIT
+          curl --fail --retry 15 --retry-connrefused --retry-delay 2 http://localhost:8000/api/v1/health

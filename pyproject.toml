@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "car-insurance-premium-simulator"
+version = "0.1.0"
+description = "FastAPI backend for a car insurance premium simulator"
+authors = []
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.14"
+fastapi = ">=0.115,<1.0"
+pydantic-settings = ">=2.7,<3.0"
+uvicorn = {extras = ["standard"], version = ">=0.34,<1.0"}
+pyyaml = ">=6.0,<7.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=8.3,<9.0"
+httpx = ">=0.28,<1.0"
+ruff = ">=0.11,<1.0"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

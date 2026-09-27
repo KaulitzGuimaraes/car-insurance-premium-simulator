@@ -1,0 +1,9 @@
+gis:
+  max_adjustment: 0.02
+  min_adjustment: -0.02
+
+pricing:
+  age_rate_increment: 0.005
+  coverage_percentage: 1.0
+  value_rate_increment: 0.005
+  value_rate_step: 10000
